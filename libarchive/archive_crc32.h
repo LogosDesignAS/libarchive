@@ -41,7 +41,7 @@
  * compared to about 800MB/s for the zlib implementation.
  */
 static unsigned long
-crc32(unsigned long crc, const void *_p, size_t len)
+crc32_z(unsigned long crc, const void *_p, size_t len)
 {
 	unsigned long crc2, b, i;
 	const unsigned char *p = _p;
@@ -78,6 +78,15 @@ crc32(unsigned long crc, const void *_p, size_t len)
 	while (len--)
 		crc = crc_tbl[(crc ^ *p++) & 0xff] ^ (crc >> 8);
 	return (crc ^ 0xffffffffUL);
+}
+
+/*
+ * Same as crc32_z(), but with a unsigned int length.
+ */
+static unsigned long
+crc32(unsigned long crc, const void *_p, unsigned int len)
+{
+  return crc32_z(crc, _p, len);
 }
 
 #endif
